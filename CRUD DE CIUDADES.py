@@ -1,92 +1,78 @@
+
 #Implementar al codigo de melva y los grafos correspondientes para su funcionamiento
-def agregar_ciudad():
-    nombre = input("Ingrese el nombre de la ciudad: ").strip()
+def agregar_volcan():
+    nombre = input("Ingrese el nombre del volcán: ").strip()
     if nombre in ciudades:
-        print("La ciudad ya existe.")
+        print("El volcán ya existe.")
         return
-    zona = input("Ingrese la zona (Norte/Centro/Sur): ").strip()
     descripcion = input("Ingrese una descripción: ").strip()
-    ciudades[nombre] = {"zona": zona, "descripcion": descripcion}
-    arbol_zonas[zona].append(nombre)
+    ciudades[nombre] = {"descripcion": descripcion}
     guardar_datos()
-    print("Ciudad agregada correctamente.")
+    print("Volcán agregado correctamente.")
 
-
-def listar_ciudades():
-    print("\nCiudades ordenadas alfabéticamente:")
+def listar_volcanes():
+    print("\nVolcanes ordenados alfabéticamente:")
     lista = list(ciudades.keys())
     quicksort(lista, 0, len(lista) - 1)
-    for ciudad in lista:
-        print(f"- {ciudad} ({ciudades[ciudad]['zona']})")
+    for volcan in lista:
+        print(f"- {volcan}")
 
-
-def buscar_ciudad():
-    nombre = input("Ingrese el nombre de la ciudad a buscar: ").strip()
+def buscar_volcan():
+    nombre = input("Ingrese el nombre del volcán a buscar: ").strip()
     lista = list(ciudades.keys())
     quicksort(lista, 0, len(lista) - 1)
     index = busqueda_binaria(lista, nombre)
     if index != -1:
-        ciudad = lista[index]
-        print(f"\nCiudad encontrada: {ciudad}")
-        print(f"Zona: {ciudades[ciudad]['zona']}")
-        print(f"Descripción: {ciudades[ciudad]['descripcion']}")
+        volcan = lista[index]
+        print(f"\nVolcán encontrado: {volcan}")
+        print(f"Descripción: {ciudades[volcan]['descripcion']}")
     else:
-        print("Ciudad no encontrada.")
+        print("Volcán no encontrado.")
 
-
-def actualizar_ciudad():
-    nombre = input("Ingrese el nombre de la ciudad a actualizar: ").strip()
+def actualizar_volcan():
+    nombre = input("Ingrese el nombre del volcán a actualizar: ").strip()
     if nombre not in ciudades:
-        print("La ciudad no existe.")
+        print("El volcán no existe.")
         return
-    zona = input("Nueva zona (Norte/Centro/Sur): ").strip()
     descripcion = input("Nueva descripción: ").strip()
-    ciudades[nombre] = {"zona": zona, "descripcion": descripcion}
-    if nombre in arbol_zonas[ciudades[nombre]['zona']]:
-        arbol_zonas[ciudades[nombre]['zona']].remove(nombre)
-    arbol_zonas[zona].append(nombre)
+    ciudades[nombre]['descripcion'] = descripcion
     guardar_datos()
-    print("Ciudad actualizada correctamente.")
+    print("Volcán actualizado correctamente.")
 
-
-def eliminar_ciudad():
-    nombre = input("Ingrese el nombre de la ciudad a eliminar: ").strip()
+def eliminar_volcan():
+    nombre = input("Ingrese el nombre del volcán a eliminar: ").strip()
     if nombre not in ciudades:
-        print("La ciudad no existe.")
+        print("El volcán no existe.")
         return
-    zona = ciudades[nombre]['zona']
     del ciudades[nombre]
-    if nombre in arbol_zonas[zona]:
-        arbol_zonas[zona].remove(nombre)
     if nombre in grafo_rutas:
         del grafo_rutas[nombre]
     for origen in grafo_rutas:
         grafo_rutas[origen].pop(nombre, None)
     guardar_datos()
-    print("Ciudad eliminada correctamente.")
+    print("Volcán eliminado correctamente.")
 
-
-def seleccionar_lugares():
-    print("\nCiudades disponibles:")
-    listar_ciudades()
-    seleccion = input("Ingrese las ciudades separadas por coma: ").split(',')
-    seleccion = [ciudad.strip() for ciudad in seleccion if ciudad.strip() in ciudades]
+def seleccionar_volcanes():
+    print("\nVolcanes disponibles:")
+    listar_volcanes()
+    seleccion = input("Ingrese los volcanes separados por coma: ").split(',')
+    seleccion = [volcan.strip() for volcan in seleccion if volcan.strip() in ciudades]
     if not seleccion:
-        print("No se seleccionaron ciudades válidas.")
+        print("No se seleccionaron volcanes válidos.")
         return []
     return seleccion
 
-
-def guardar_itinerario():
-    lugares = seleccionar_lugares()
-    if not lugares:
+def guardar_itinerario_volcanico():
+    volcanes = seleccionar_volcanes()
+    if not volcanes:
         return
     nombre_archivo = input("Nombre del archivo de itinerario: ").strip()
-    with open(f"itinerario_{nombre_archivo}.txt", 'w') as f:
-        for ciudad in lugares:
-            datos = ciudades[ciudad]
-            f.write(f"{ciudad}|{datos['zona']}|{datos['descripcion']}\n")
+    with open(f"itinerario_volcanes_{nombre_archivo}.txt", 'w') as f:
+        for volcan in volcanes:
+            datos = ciudades[volcan]
+            f.write(f"{volcan}|{datos['descripcion']}\n")
     print("Itinerario guardado correctamente.")
+
 
 # === Algoritmo de ordenamiento manual: QuickSort ===
 def quicksort(arr, low, high):
